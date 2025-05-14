@@ -23,8 +23,8 @@
         --gradient-hover: 180deg, rgba(0, 0, 0, 0.1) 0%,
           rgba(255, 255, 255, 0.1) 100%;
 
-        --shadow: 0px 11px 7px 0px rgba(0, 0, 0, 0.01) 0px 7px 7px 0px
-            rgba(0, 0, 0, 0.04),
+        --shadow: 0px 11px 7px 0px rgba(0, 0, 0, 0.01),
+          0px 7px 7px 0px rgba(0, 0, 0, 0.04),
           0px 4px 6px 0px rgba(0, 0, 0, 0.1),
           0px 2px 4px 0px rgba(0, 0, 0, 0.26),
           0px 0px 2px 0px rgba(0, 0, 0, 0.29),
@@ -58,8 +58,36 @@
       }) {
         return React.createElement(
           as,
-          { className: `${textVariants[variant]} ${className}}`, ...props },
+          {
+            className: `${textVariants[variant]} ${className ? className : ""}`,
+            ...props,
+          },
           children
+        );
+      }
+
+      const buttonVariants = {
+        default: "bg-(--background)",
+        primary: "bg-(--primary)",
+      };
+      function Button({ variant = "default", className, children, ...props }) {
+        return (
+          <Text
+            as="button"
+            variant="heading"
+            className={`
+              flex items-center justify-center rounded-xl
+              p-3 cursor-pointer
+              text-(--text) bg-linear-(--gradient)
+              hover:bg-linear-(--gradient-hover)
+              shadow-(--shadow)
+              ${buttonVariants[variant]}
+              ${className ? className : ""}
+          `}
+            {...props}
+          >
+            {children}
+          </Text>
         );
       }
 
@@ -67,6 +95,8 @@
         return (
           <main className="py-28 px-4">
             <Text variant="muted">Hello World! </Text>
+            <Button>CE</Button>
+            <Button variant="primary">/</Button>
           </main>
         );
       }
