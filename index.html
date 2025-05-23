@@ -133,7 +133,7 @@
           { input: "7" },
           { input: "8" },
           { input: "9" },
-          { input: "X", variant: "primary" },
+          { input: "*", variant: "primary" },
         ],
         [
           { input: "4" },
@@ -157,9 +157,24 @@
       const CalculatorContext = React.createContext();
       function CalculatorProvider({ children }) {
         const [history, setHistory] = React.useState([]);
+        const historyStorageKey = "history";
+
+        React.useEffect(() => {
+          const savedHistory = localStorage.getItem(historyStorageKey);
+          setHistory(JSON.parse(savedHistory || "[]"));
+        }, []);
 
         function updatedHistory(operation, parsedResult) {
-          setHistory((prev) => [...prev, `${operation}=${parsedResult}`]);
+          setHistory((prev) => {
+            const updatedHistory = [...prev, `${operation}=${parsedResult}`];
+
+            localStorage.setItem(
+              historyStorageKey,
+              JSON.stringify(updatedHistory)
+            );
+
+            return updatedHistory;
+          });
         }
 
         return (
